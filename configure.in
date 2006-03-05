@@ -1,0 +1,82 @@
+dnl configure.in script for bmp_mac
+dnl Author: Stanislav Sedov <ssedov@mbsd.msk.ru>
+
+dnl ------------------- Initialization -----------------------------------
+dnl autoconf
+AC_PREREQ(2.59)
+AC_COPYRIGHT([Copyright (c) 2006 MBSD labs, http://www.mbsd.msk.ru, Moscow])
+AC_INIT([bmp_mac], [1.0], [ssedov@mbsd.msk.ru])
+AC_CONFIG_SRCDIR([src/])
+AC_CONFIG_HEADER([config.h])
+
+AC_ISC_POSIX
+
+dnl automake
+dnl AMU_PACKAGE_NAME($PACKAGE_NAME)
+dnl AMU_PACKAGE_VERSION($PACKAGE_VERSION)
+dnl AMU_PACKAGE_BUGREPORT($PACKAGE_BUGREPORT)
+AM_INIT_AUTOMAKE([bmp_mac], [1.0])
+
+dnl ------------------ Check for programs --------------------------------
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_CC_C_O                                                                  
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_RANLIB
+AC_PROG_LIBTOOL
+dnl AC_PROG_PKG_CONFIG
+
+dnl disable mainatiner mode
+AM_MAINTAINER_MODE
+
+dnl ------------------- Check for libraries ------------------------------
+PKG_CHECK_MODULES(BEEP, [bmp >= 0.9.7], [],
+	[AC_MSG_ERROR([At least BMP 0.9.7 is required!])])
+
+BEEP_INPUT_PLUGIN_DIR=`$PKG_CONFIG --variable=input_plugin_dir bmp`
+AC_SUBST(BEEP_INPUT_PLUGIN_DIR)
+
+PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.4.0], [],
+	[AC_MSG_ERROR([AT least GTK+ 2.4.0 isr required!])])
+
+AC_CHECK_LIB(mac, DecompressFile, [],
+	[AC_MSG_ERROR([MAC libraries is required!])])
+
+dnl ------------------- Check for headers --------------------------------
+AC_HEADER_STDC
+AC_CHECK_HEADERS([unistd.h pthread.h wchar.h stdint.h sys/types.h])
+
+AC_LANG_CPLUSPLUS
+AC_CHECK_HEADERS([mac/All.h mac/NoWindows.h])
+AC_CHECK_HEADER([mac/MACLib.h], [],
+	[AC_MSG_ERROR([MAC lib headers are required!])],
+	[
+	#if HAVE_STDINT_H
+	#include <stdint.h>
+	#endif
+	#if HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+	#endif
+	#include <mac/All.h>
+])
+
+dnl ------------------- Results ------------------------------------------
+MAC_LIBS="-lmac"
+MAC_CXXFLAGS="-DBUILD_CROSS_PLATFORM"
+
+AC_SUBST(MAC_LIBS)
+AC_SUBST(MAC_CXXFLAGS)
+
+AC_CONFIG_FILES([Makefile
+		 src/Makefile
+])
+
+AC_MSG_RESULT([])
+AC_MSG_RESULT([ $PACKAGE version $VERSION configured successfully!])
+AC_MSG_RESULT([/******************************************************/])
+AC_MSG_RESULT([/* Now type make/gmake                                */])
+AC_MSG_RESULT([/******************************************************/])
+AC_MSG_RESULT([])
+
+AC_OUTPUT
