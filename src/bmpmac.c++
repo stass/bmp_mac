@@ -28,7 +28,7 @@
  *
  * Author: Stanislav Sedov <ssedov@mbsd.msk.ru>
  *
- * $Id: bmpmac.c++,v 1.1 2006/03/05 18:50:53 stas Exp $
+ * $Id: bmpmac.c++,v 1.2 2006/03/05 18:55:56 stas Exp $
  */
 
 #include "config.h"
@@ -63,6 +63,8 @@
 #undef __BMP_DEBUG__
 #ifdef __BMP_DEBUG__
 #	define ASSERT(x) assert(x)
+#else
+#	define ASSERT(x)
 #endif
 
 #define BUFSIZE	512
