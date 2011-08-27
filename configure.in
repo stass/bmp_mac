@@ -18,9 +18,8 @@ dnl AMU_PACKAGE_BUGREPORT($PACKAGE_BUGREPORT)
 AM_INIT_AUTOMAKE([bmp_mac], [1.0])
 
 dnl ------------------ Check for programs --------------------------------
-AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_CPP
-AC_PROG_CC_C_O                                                                  
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_RANLIB
@@ -47,7 +46,6 @@ dnl ------------------- Check for headers --------------------------------
 AC_HEADER_STDC
 AC_CHECK_HEADERS([unistd.h pthread.h wchar.h stdint.h sys/types.h])
 
-AC_LANG_CPLUSPLUS
 AC_CHECK_HEADERS([mac/All.h mac/NoWindows.h])
 AC_CHECK_HEADER([mac/MACLib.h], [],
 	[AC_MSG_ERROR([MAC lib headers are required!])],
